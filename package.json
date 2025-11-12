@@ -1,0 +1,26 @@
+{
+  "name": "mern-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js",
+    "vercel-start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.1",
+    "flowbite": "^3.1.2",
+    "flowbite-react": "^0.12.10",
+    "mongodb": "^6.9.0",
+    "nodemailer": "^7.0.10",
+    "nodemon": "^3.1.7",
+    "openai": "^6.8.0",
+    "razorpay": "^2.9.6",
+    "react-icons": "^5.5.0"
+  }
+}
