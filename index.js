@@ -429,7 +429,7 @@ const port = process.env.PORT || 5001;
 
 // ✅ Enable CORS
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "https://book-backend-jade.vercel.app",
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
 }));
 app.use(express.json());
