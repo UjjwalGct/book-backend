@@ -562,7 +562,7 @@ async function run() {
 
     // ✅ Start server after connecting DB
     app.listen(port, () => {
-      console.log(`🚀 Server running on http://localhost:${port}`);
+      console.log(` my backensn is live at : https://book-backend-jade.vercel.app`);
     });
   } catch (err) {
     console.error("❌ MongoDB connection error:", err);
