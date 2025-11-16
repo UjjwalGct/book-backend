@@ -584,30 +584,187 @@
 // run().catch(console.dir);
 
 
+
+
+
+//type 2
+
+
+// const express = require("express");
+// const cors = require("cors");
+// const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+
+// const app = express();
+// const port = process.env.PORT || 5001;
+
+// // ✅ Detect environment
+// const isLocal = process.env.NODE_ENV !== "production";
+
+// // ✅ Enable CORS for both local & deployed frontend
+// app.use(cors({
+//   origin: isLocal
+//     ? ["http://localhost:5173"]
+//     : ["https://book-backend-jade.vercel.app"],
+//   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+//   credentials: true
+// }));
+
+// app.use(express.json());
+
+// // ✅ MongoDB setup
+// const uri = "mongodb+srv://mern-book-store:UZTCnITHdQYoHk45@cluster0.mqxe7uu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+// const client = new MongoClient(uri, {
+//   serverApi: {
+//     version: ServerApiVersion.v1,
+//     strict: true,
+//     deprecationErrors: true,
+//   },
+// });
+
+// let bookCollection;
+// let orderCollection;
+
+// async function run() {
+//   try {
+//     await client.connect();
+//     console.log("✅ Connected to MongoDB successfully");
+
+//     bookCollection = client.db("BookInventory").collection("books");
+//     orderCollection = client.db("BookInventory").collection("orders");
+
+//     // ✅ Default route
+//     app.get("/", (req, res) => {
+//       res.send("📚 Book Store Backend is running — by Ujjwal Pandey ✅");
+//     });
+
+//     // ✅ Upload a book
+//     app.post("/upload-book", async (req, res) => {
+//       try {
+//         const data = req.body;
+//         const result = await bookCollection.insertOne(data);
+//         res.send(result);
+//       } catch (err) {
+//         console.error("Error inserting book:", err);
+//         res.status(500).send({ message: "Failed to upload book" });
+//       }
+//     });
+
+//     // ✅ Get all books
+//     app.get("/all-books", async (req, res) => {
+//       try {
+//         const query = req.query?.category ? { category: req.query.category } : {};
+//         const result = await bookCollection.find(query).toArray();
+//         res.send(result);
+//       } catch (err) {
+//         console.error("Error fetching books:", err);
+//         res.status(500).send({ message: "Failed to fetch books" });
+//       }
+//     });
+
+//     // ✅ Get single book
+//     app.get("/book/:id", async (req, res) => {
+//       try {
+//         const id = req.params.id;
+//         const result = await bookCollection.findOne({ _id: new ObjectId(id) });
+//         res.send(result);
+//       } catch (err) {
+//         console.error("Error fetching book:", err);
+//         res.status(500).send({ message: "Failed to fetch book" });
+//       }
+//     });
+
+//     // ✅ Search book by title or author
+//     app.get("/books", async (req, res) => {
+//       const search = req.query.search;
+//       if (!search)
+//         return res.status(400).json({ message: "Missing search query" });
+
+//       try {
+//         const result = await bookCollection.findOne({
+//           $or: [
+//             { bookTitle: { $regex: new RegExp(search, "i") } },
+//             { authorName: { $regex: new RegExp(search, "i") } },
+//           ],
+//         });
+
+//         if (!result) return res.status(404).json({ message: "Book not found" });
+
+//         res.json(result);
+//       } catch (err) {
+//         console.error("Error searching:", err);
+//         res.status(500).json({ message: "Internal Server Error" });
+//       }
+//     });
+//     // ✅ Update a book
+//     app.patch("/book/:id", async (req, res) => {
+//       const id = req.params.id;
+//       const updateBook = req.body;
+//       const filter = { _id: new ObjectId(id) };
+//       const updateDoc = { $set: updateBook };
+//       const result = await bookCollection.updateOne(filter, updateDoc);
+//       res.send(result);
+//     });
+//     // ✅ Delete a book
+//     app.delete("/book/:id", async (req, res) => {
+//       const id = req.params.id;
+//       const result = await bookCollection.deleteOne({ _id: new ObjectId(id) });
+//       res.send(result);
+//     });
+//     // ✅ Place Order
+//     app.post("/api/orders", async (req, res) => {
+//       const order = req.body;
+//       if (!order.user || !order.bookId || !order.paymentMethod)
+//         return res.status(400).send({ message: "Missing order details" });
+
+//       const result = await orderCollection.insertOne(order);
+//       res.send({ success: true, message: "Order placed successfully", id: result.insertedId });
+//     });
+//     // ✅ Start server only if running locally
+//     if (isLocal) {
+//       app.listen(port, () => {
+//         console.log(`🚀 Local backend running on http://localhost:${port}`);
+//       });
+//     } else {
+//       console.log("🚀 Running in production on Vercel");
+//     }
+//    } catch (err) {
+//      console.error("❌ MongoDB connection error:", err);
+//    }
+// }
+// run().catch(console.dir);
+
+
+
+
+//type 3
+
 const express = require("express");
 const cors = require("cors");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
+// === Express App ===
 const app = express();
-const port = process.env.PORT || 5001;
 
-// ✅ Detect environment
-const isLocal = process.env.NODE_ENV !== "production";
-
-// ✅ Enable CORS for both local & deployed frontend
-app.use(cors({
-  origin: isLocal
-    ? ["http://localhost:5173"]
-    : ["https://book-backend-jade.vercel.app"],
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-  credentials: true
-}));
+// === CORS ===
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://book-backend-jade.vercel.app",
+      "https://your-frontend.vercel.app"
+    ],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
-// ✅ MongoDB setup
-const uri = "mongodb+srv://mern-book-store:UZTCnITHdQYoHk45@cluster0.mqxe7uu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-const client = new MongoClient(uri, {
+// === MongoDB Connection (Serverless Safe) ===
+const uri =
+  "mongodb+srv://mern-book-store:UZTCnITHdQYoHk45@cluster0.mqxe7uu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+
+let client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
@@ -615,114 +772,155 @@ const client = new MongoClient(uri, {
   },
 });
 
-let bookCollection;
-let orderCollection;
+// Cache connection for Vercel
+let cachedClient = null;
+let cachedDb = null;
 
-async function run() {
-  try {
-    await client.connect();
-    console.log("✅ Connected to MongoDB successfully");
+async function connectDB() {
+  if (cachedDb) return cachedDb;
 
-    bookCollection = client.db("BookInventory").collection("books");
-    orderCollection = client.db("BookInventory").collection("orders");
-
-    // ✅ Default route
-    app.get("/", (req, res) => {
-      res.send("📚 Book Store Backend is running — by Ujjwal Pandey ✅");
-    });
-
-    // ✅ Upload a book
-    app.post("/upload-book", async (req, res) => {
-      try {
-        const data = req.body;
-        const result = await bookCollection.insertOne(data);
-        res.send(result);
-      } catch (err) {
-        console.error("Error inserting book:", err);
-        res.status(500).send({ message: "Failed to upload book" });
-      }
-    });
-
-    // ✅ Get all books
-    app.get("/all-books", async (req, res) => {
-      try {
-        const query = req.query?.category ? { category: req.query.category } : {};
-        const result = await bookCollection.find(query).toArray();
-        res.send(result);
-      } catch (err) {
-        console.error("Error fetching books:", err);
-        res.status(500).send({ message: "Failed to fetch books" });
-      }
-    });
-
-    // ✅ Get single book
-    app.get("/book/:id", async (req, res) => {
-      try {
-        const id = req.params.id;
-        const result = await bookCollection.findOne({ _id: new ObjectId(id) });
-        res.send(result);
-      } catch (err) {
-        console.error("Error fetching book:", err);
-        res.status(500).send({ message: "Failed to fetch book" });
-      }
-    });
-
-    // ✅ Search book by title or author
-    app.get("/books", async (req, res) => {
-      const search = req.query.search;
-      if (!search)
-        return res.status(400).json({ message: "Missing search query" });
-
-      try {
-        const result = await bookCollection.findOne({
-          $or: [
-            { bookTitle: { $regex: new RegExp(search, "i") } },
-            { authorName: { $regex: new RegExp(search, "i") } },
-          ],
-        });
-
-        if (!result) return res.status(404).json({ message: "Book not found" });
-
-        res.json(result);
-      } catch (err) {
-        console.error("Error searching:", err);
-        res.status(500).json({ message: "Internal Server Error" });
-      }
-    });
-    // ✅ Update a book
-    app.patch("/book/:id", async (req, res) => {
-      const id = req.params.id;
-      const updateBook = req.body;
-      const filter = { _id: new ObjectId(id) };
-      const updateDoc = { $set: updateBook };
-      const result = await bookCollection.updateOne(filter, updateDoc);
-      res.send(result);
-    });
-    // ✅ Delete a book
-    app.delete("/book/:id", async (req, res) => {
-      const id = req.params.id;
-      const result = await bookCollection.deleteOne({ _id: new ObjectId(id) });
-      res.send(result);
-    });
-    // ✅ Place Order
-    app.post("/api/orders", async (req, res) => {
-      const order = req.body;
-      if (!order.user || !order.bookId || !order.paymentMethod)
-        return res.status(400).send({ message: "Missing order details" });
-
-      const result = await orderCollection.insertOne(order);
-      res.send({ success: true, message: "Order placed successfully", id: result.insertedId });
-    });
-    // ✅ Start server only if running locally
-    if (isLocal) {
-      app.listen(port, () => {
-        console.log(`🚀 Local backend running on http://localhost:${port}`);
-      });
-    } else {
-      console.log("🚀 Running in production on Vercel");
-    }
-  } catch (err) {
-    console.error("❌ MongoDB connection error:", err);
+  if (!cachedClient) {
+    cachedClient = await client.connect();
   }
+
+  cachedDb = cachedClient.db("BookInventory");
+  console.log("🌍 MongoDB Connected (Serverless Mode)");
+
+  return cachedDb;
 }
-run().catch(console.dir);
+
+// ================== ROUTES =====================
+
+// Base route
+app.get("/", (req, res) => {
+  res.send("📚 Book Store Backend on Vercel — by Ujjwal Pandey");
+});
+
+// Upload book
+app.post("/upload-book", async (req, res) => {
+  try {
+    const db = await connectDB();
+    const bookCollection = db.collection("books");
+
+    const result = await bookCollection.insertOne(req.body);
+    res.send(result);
+  } catch (err) {
+    console.error("Upload Error:", err);
+    res.status(500).json({ message: "Failed to upload book" });
+  }
+});
+
+// All books
+app.get("/all-books", async (req, res) => {
+  try {
+    const db = await connectDB();
+    const bookCollection = db.collection("books");
+
+    const query = req.query.category ? { category: req.query.category } : {};
+    const books = await bookCollection.find(query).toArray();
+
+    res.send(books);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch books" });
+  }
+});
+
+// Single book
+app.get("/book/:id", async (req, res) => {
+  try {
+    const db = await connectDB();
+    const bookCollection = db.collection("books");
+
+    const result = await bookCollection.findOne({
+      _id: new ObjectId(req.params.id),
+    });
+
+    res.send(result);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch book" });
+  }
+});
+
+// Search book
+app.get("/books", async (req, res) => {
+  try {
+    const db = await connectDB();
+    const bookCollection = db.collection("books");
+
+    const search = req.query.search;
+    if (!search) return res.status(400).json({ message: "Missing search query" });
+
+    const result = await bookCollection.findOne({
+      $or: [
+        { bookTitle: { $regex: new RegExp(search, "i") } },
+        { authorName: { $regex: new RegExp(search, "i") } },
+      ],
+    });
+
+    if (!result) return res.status(404).json({ message: "Book not found" });
+
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// Update book
+app.patch("/book/:id", async (req, res) => {
+  try {
+    const db = await connectDB();
+    const bookCollection = db.collection("books");
+
+    const result = await bookCollection.updateOne(
+      { _id: new ObjectId(req.params.id) },
+      { $set: req.body }
+    );
+
+    res.send(result);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to update book" });
+  }
+});
+
+// Delete book
+app.delete("/book/:id", async (req, res) => {
+  try {
+    const db = await connectDB();
+    const bookCollection = db.collection("books");
+
+    const result = await bookCollection.deleteOne({
+      _id: new ObjectId(req.params.id),
+    });
+
+    res.send(result);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to delete book" });
+  }
+});
+
+// Place order
+app.post("/api/orders", async (req, res) => {
+  try {
+    const db = await connectDB();
+    const orderCollection = db.collection("orders");
+
+    const order = req.body;
+
+    if (!order.user || !order.bookId || !order.paymentMethod) {
+      return res.status(400).json({ message: "Missing order details" });
+    }
+
+    const result = await orderCollection.insertOne(order);
+
+    res.json({
+      success: true,
+      message: "Order placed successfully",
+      id: result.insertedId,
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Order failed" });
+  }
+});
+
+// === EXPORT FOR VERCEL ===
+module.exports = app;
